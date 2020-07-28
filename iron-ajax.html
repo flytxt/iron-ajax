@@ -401,6 +401,11 @@ element.
           headers[header] = this.headers[header].toString();
         }
       }
+      
+      // Addition of x-csrf-token header
+      if (app.csrfToken) {
+        headers['x-csrf-token'] = app.csrfToken;
+      }
 
       return headers;
     },
