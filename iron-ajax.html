@@ -323,6 +323,22 @@ element.
         value: function() {
           return this._handleResponse.bind(this);
         }
+      },
+
+      /**
+       * 
+       * If false, the 'x-csrf-token' header 
+       * (stored within 'value' of a hidden input element with ID 'csrfToken')
+       * will be added to the headers.
+       * Example:
+       *  <input type="hidden" id="csrfToken" value="CSRF-token"/>
+       * 
+       * To disable this, set to true.
+       * 
+       */
+      disableCsrf: {
+        type: Boolean,
+        value: false
       }
     },
 
@@ -401,10 +417,13 @@ element.
           headers[header] = this.headers[header].toString();
         }
       }
-      
-      // Addition of x-csrf-token header
-      if (app.csrfToken) {
-        headers['x-csrf-token'] = app.csrfToken;
+
+      /**
+       * Addition of 'x-csrf-token' header in request headers
+       */
+      var tokenEl = document.querySelector('#csrfToken');
+      if (!this.disableCsrf && tokenEl && !!tokenEl.getAttribute('value')) {
+        headers['x-csrf-token'] = tokenEl.getAttribute('value');
       }
 
       return headers;
